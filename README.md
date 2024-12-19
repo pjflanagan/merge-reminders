@@ -14,13 +14,13 @@ First, add a comments to a file like this:
 // src/examples/readme.ts
 
 // @merge: be sure `offsetHeight` is reflected in `style.module.scss`
-const offsetHeight = 154px;
+const offsetHeight = 154;
 
-…
+// ...
 
 // @merge: when adding an API endpoint, be sure to update relevant documentation
 class API {
-  …
+  // ...
 }
 ```
 
