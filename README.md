@@ -2,6 +2,10 @@
 
 This is a Github commit hook that adds relevant reminders to PR descriptions.
 
+## Tutorials
+
+- https://docs.github.com/en/actions/writing-workflows/quickstart  
+
 ## Installation
 
 ...
