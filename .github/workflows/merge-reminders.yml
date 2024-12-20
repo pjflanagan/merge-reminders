@@ -1,8 +1,8 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Merge Reminders
+run-name: Reminding ${{ github.actor }} before merging PR
 on: [push]
 jobs:
-  Merge Reminders:
+  merge-reminders:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (fetch last two commits) of the PR
