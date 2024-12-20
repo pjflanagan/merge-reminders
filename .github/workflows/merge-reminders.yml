@@ -1,6 +1,8 @@
 name: Merge Reminders
 run-name: Reminding ${{ github.actor }} before merging PR
-on: [push]
+on:
+  pull_request:
+
 jobs:
   merge-reminders:
     runs-on: ubuntu-latest
