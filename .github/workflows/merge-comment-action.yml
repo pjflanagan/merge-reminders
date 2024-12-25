@@ -1,0 +1,34 @@
+name: Add @merge comments to PR description
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  add-merge-comments:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Search for @merge comments
+      id: search-merge-comments
+      run: |
+        comments=$(grep -r '@merge' . || true)
+        echo "::set-output name=comments::$comments"
+
+    - name: Update PR description
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          **@merge comments found in the code:**
+          ${{ steps.search-merge-comments.outputs.comments }}
