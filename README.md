@@ -2,9 +2,10 @@
 
 This is a Github commit hook that adds relevant reminders to PR descriptions.
 
-## Tutorials
+## Tutorials and Examples
 
-- https://docs.github.com/en/actions/writing-workflows/quickstart  
+- https://docs.github.com/en/actions/writing-workflows/quickstart 
+- https://github.com/bcgov-nr/action-pr-description-add
 
 ## Installation
 
