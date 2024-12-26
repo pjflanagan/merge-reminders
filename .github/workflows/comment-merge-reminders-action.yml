@@ -26,6 +26,8 @@ jobs:
           if [ -n "$lines" ]; then
             comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
             echo "::set-output name=comments::$comments"
+          else
+            echo "::set-output name=comments::None"
           fi
 
     - name: Find comment
@@ -43,6 +45,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         issue-number: ${{ github.event.pull_request.number }}
+        edit-mode: replace
         body: |
           **Merge Reminders**
           ${{ steps.search-merge-comments.outputs.comments }}
+        reactions: eyes
