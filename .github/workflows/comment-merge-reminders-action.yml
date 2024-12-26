@@ -14,21 +14,22 @@ jobs:
       with:
         fetch-depth: 0
 
-    # if [ -n "$files" ]; then
-    #   files=$(echo "$files" | sed '/comment-merge-reminders-action/d')
-    # fi
+
 
     - name: Search for merge comments
       id: search-merge-comments
       run: |
           files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          lines=$(echo "$files" | xargs grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
-          if [ -n "$lines" ]; then
-            comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
-            echo "comments=$comments" >> $GITHUB_OUTPUT
-          else
-            echo "comments=None" >> $GITHUB_OUTPUT
+          if [ -n "$files" ]; then
+            lines=$(echo "$files" | xargs grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+            if [ -n "$lines" ]; then
+              comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              echo "comments=$comments" >> $GITHUB_OUTPUT
+            else
+              echo "comments=None" >> $GITHUB_OUTPUT
+            fi
           fi
+
 
     - name: Find comment
       uses: peter-evans/find-comment@v3
