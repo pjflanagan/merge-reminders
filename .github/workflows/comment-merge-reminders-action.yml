@@ -24,7 +24,7 @@ jobs:
           fi
           line_length=${#lines}
           if [ -n "$lines" ]; then
-            comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/\/\/ MERGE:/`/')
+            comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
             echo "::set-output name=comments::$comments"
           fi
 
