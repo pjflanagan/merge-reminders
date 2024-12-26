@@ -1,4 +1,4 @@
-name: Merge Reminders 
+name: Merge Reminders
 
 on:
   pull_request:
@@ -9,16 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-
-
-    - name: Search for merge comments
-      id: search-merge-comments
-      run: |
+      - name: Search for merge comments
+        id: search-merge-comments
+        run: |
           files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           if [ -n "$files" ]; then
             lines=$(echo "$files" | xargs grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
@@ -30,24 +28,23 @@ jobs:
             fi
           fi
 
+      - name: Find comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: Merge Reminders
 
-    - name: Find comment
-      uses: peter-evans/find-comment@v3
-      id: fc
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        comment-author: 'github-actions[bot]'
-        body-includes: Merge Reminders
-
-    - name: Update comment
-      uses: peter-evans/create-or-update-comment@v4.0.0
-      with:
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        repository: ${{ github.repository }}
-        issue-number: ${{ github.event.pull_request.number }}
-        edit-mode: replace
-        body: |
-          **Merge Reminders**
-          ${{ steps.search-merge-comments.outputs.comments }}
-        reactions: eyes
+      - name: Update comment
+        uses: peter-evans/create-or-update-comment@v4.0.0
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            **Merge Reminders**
+            ${{ steps.search-merge-comments.outputs.comments }}
+          reactions: eyes
