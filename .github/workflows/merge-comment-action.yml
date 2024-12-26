@@ -1,4 +1,4 @@
-name: Add @merge comments to PR description
+name: Add Merge Reminders to PR description
 
 on:
   pull_request:
@@ -11,24 +11,45 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        fetch-depth: 0
 
-    - name: Search for @merge comments
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14'
+    # COMMIT_SHA?
+
+    # - name: git-diff-action
+    #   uses: GrantBirki/git-diff-action@v2.7.0
+    #   id: git-diff-action
+    #   with:
+    #     file_output_only: "true"
+
+    # files=${{ steps.git-diff-action.outputs.json-diff-path }}
+    # github.event.workflow_run.head_sha ?
+    - name: Search for merge comments
       id: search-merge-comments
       run: |
-        comments=$(grep -r '@merge' . || true)
-        echo "::set-output name=comments::$comments"
+          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          comments=$(echo "$files" | xargs grep -r '@merge' | sed 's/^/- [ ] /' || true)
+          echo "::set-output name=comments::$comments"
 
-    - name: Update PR description
+    - name: Find comment
+      uses: peter-evans/find-comment@v3
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: Merge comments found in the code
+
+    - name: Update comment
       uses: peter-evans/create-or-update-comment@v4.0.0
       with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          **@merge comments found in the code:**
+          **Merge comments found in the code:**
           ${{ steps.search-merge-comments.outputs.comments }}
