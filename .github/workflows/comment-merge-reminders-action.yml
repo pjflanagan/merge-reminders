@@ -1,11 +1,11 @@
-name: Add Merge Reminders to PR description
+name: Merge Reminders 
 
 on:
   pull_request:
     types: [opened, edited, synchronize]
 
 jobs:
-  add-merge-comments:
+  comment-merge-reminders-action:
     runs-on: ubuntu-latest
 
     steps:
