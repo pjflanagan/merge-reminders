@@ -18,11 +18,10 @@ jobs:
       id: search-merge-comments
       run: |
           files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          lines=$(echo "$files" | xargs grep -r '// MERGE:')
-          if [ -n "$lines" ]; then
-            lines=$(echo "$lines" | sed '/comment-merge-reminders-action/d')
+          if [ -n "$files" ]; then
+            files=$(echo "$files" | sed '/comment-merge-reminders-action/d')
           fi
-          line_length=${#lines}
+          lines=$(echo "$files" | xargs grep -r '// MERGE:')
           if [ -n "$lines" ]; then
             comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
             echo "::set-output name=comments::$comments"
