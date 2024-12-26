@@ -19,8 +19,12 @@ jobs:
       run: |
           files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           lines=$(echo "$files" | xargs grep -r '// MERGE:')
-          comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/\/\/ MERGE:/`/')
-          echo "::set-output name=comments::$comments"
+          lines=$(echo "$lines" | sed '/comment-merge-reminders-action/d')
+          line_length=${#lines}
+          if [ "$line_length" -gt 0 ]; then
+            comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/\/\/ MERGE:/`/')
+            echo "::set-output name=comments::$comments"
+          fi
 
     - name: Find comment
       uses: peter-evans/find-comment@v3
