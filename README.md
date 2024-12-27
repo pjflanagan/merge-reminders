@@ -14,28 +14,28 @@ This is useful for code with specific rules about updating that are important no
 
 Add comments beginning with `MERGE:` to your code like this:
 
-```py
-# api.py
-
-# MERGE: when adding an API endpoint, be sure to update the [documentation](https://docs.example.com)
-class API:
-  # ...
-```
-
-You can also add them to the end of lines like this:
-
 ```tsx
 // Header.tsx
 
-const offsetHeight = 154; // MERGE: be sure `offsetHeight` is reflected in `style.module.scss`
+const offsetHeight = 154; // MERGE: Be sure `offsetHeight` is reflected in `style.module.scss`
+```
+
+Comments can use Markdown and Github usernames:
+
+```py
+# api.py
+
+# MERGE: Update the [documentation](https://docs.example.com) or @pjflanagan will be upset
+class API:
+  # ...
 ```
 
 Then, when a dev creates a PR that modifies a file with `MERGE` comments,
 those instructions will automatically be commented on your PRs, like this:
 
 > **Merge Reminders**
-> - [ ] `Header.tsx`: be sure `offsetHeight` is reflected in `style.module.scss`
-> - [ ] `api.py` when adding an API endpoint, be sure to update the [documentation](https://docs.example.com)
+> - [ ] `Header.tsx`: Be sure `offsetHeight` is reflected in `style.module.scss`
+> - [ ] `api.py` Update the [documentation](https://docs.example.com) or @pjflanagan will be upset
 
 You can then make it a requirement to check all boxes on PRs before merge,
 forcing users to acknowledge instructions for each file. This is useful when:
