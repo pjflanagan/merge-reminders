@@ -12,7 +12,7 @@ This is useful for code with specific rules about updating that are important no
 
 ## Usage
 
-Add comments beginning with `MERGE` to your code like this:
+Add comments beginning with `MERGE:` to your code like this:
 
 ```py
 # api.py
