@@ -20,8 +20,8 @@ jobs:
       #   echo EOF
       # } >> "$GITHUB_OUTPUT"
 
-      - name: Search for merge comments
-        id: search-merge-comments
+      - name: Find for merge comments
+        id: find-merge-comments
         run: |
           echo "Modified files:"
           files=$(git diff --name-only origin/main HEAD)
@@ -38,7 +38,7 @@ jobs:
               echo ""
 
               echo "Formatting comments:"
-              comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              comments=$(echo "$lines" | sed 's/^[ \t]*/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
               echo "$comments"
               echo ""
 
@@ -56,6 +56,13 @@ jobs:
             echo "comments=None" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Validate merge comments for test
+        id: validate-merge-comments
+        run: |
+          echo "${{ steps.find-merge-comments.outputs.comments }}"
+  
+ 
+  
       - name: Find comment
         uses: peter-evans/find-comment@v3
         id: fc
@@ -74,5 +81,5 @@ jobs:
           edit-mode: replace
           body: |
             **Merge Reminders**
-            ${{ steps.search-merge-comments.outputs.comments }}
+            ${{ steps.find-merge-comments.outputs.comments }}
           reactions: eyes
