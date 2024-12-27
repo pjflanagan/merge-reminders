@@ -27,11 +27,11 @@ jobs:
             if [ -n "$lines" ]; then
               echo "$lines"
               echo ""
-              comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/' | sed 's/$/\n/')
               {
-                echo 'comments<<"\n"'
+                echo 'comments<<EOF'
                 echo $comments
-                echo "\n"
+                echo EOF
               } >> "$GITHUB_OUTPUT"
             else
               echo "None"
