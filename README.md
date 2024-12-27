@@ -37,7 +37,7 @@ those instructions will automatically be commented on your PRs, like this:
 > - [ ] `Header.tsx`: Be sure `offsetHeight` is reflected in `style.module.scss`
 > - [ ] `api.py` Update the [documentation](https://docs.example.com) or @pjflanagan will be upset
 
-You can then make it a requirement to check all boxes on PRs before merge,
+You can then make it a requirement to check all boxes on PRs before merge using another action like [Task Completed Checker](https://github.com/marketplace/actions/task-completed-checker),
 forcing users to acknowledge instructions for each file. This is useful when:
 - You want to ask devs to adhere to a pattern
 - You need devs to update a different file to match changes in this one
