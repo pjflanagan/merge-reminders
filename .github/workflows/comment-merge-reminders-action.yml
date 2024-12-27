@@ -24,7 +24,7 @@ jobs:
         id: find-merge-comments
         run: |
           echo "Modified files:"
-          files=$(git diff --name-only origin/main HEAD)
+          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
 
           if [ -n "$files" ]; then
             echo "$files"
