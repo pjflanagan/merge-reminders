@@ -1,11 +1,11 @@
-name: Merge Reminders
+name: Merge Comment Reminders
 
 on:
   pull_request:
     types: [opened, edited, synchronize]
 
 jobs:
-  comment-merge-reminders-action:
+  merge-comment-reminders-action:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Find for merge comments
+      - name: Find merge comments
         id: find-merge-comments
         run: |
           echo "Modified files:"
@@ -50,7 +50,7 @@ jobs:
             echo "comments=None" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Find comment
+      - name: Find PR comment
         uses: peter-evans/find-comment@v3
         id: fc
         with:
@@ -58,7 +58,7 @@ jobs:
           comment-author: "github-actions[bot]"
           body-includes: Merge Reminders
 
-      - name: Update comment
+      - name: Update PR comment
         uses: peter-evans/create-or-update-comment@v4.0.0
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
