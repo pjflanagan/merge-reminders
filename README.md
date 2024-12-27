@@ -33,6 +33,7 @@ const offsetHeight = 154; // MERGE: be sure `offsetHeight` is reflected in `styl
 Then, when a dev creates a PR that modifies a file with `MERGE` comments,
 those instructions will automatically be commented on your PRs, like this:
 
+> **Merge Reminders**
 > - [ ] `Header.tsx`: be sure `offsetHeight` is reflected in `style.module.scss`
 > - [ ] `api.py` when adding an API endpoint, be sure to update the [documentation](https://docs.example.com)
 
