@@ -1,7 +1,7 @@
 
 # Merge Comment Reminders
 
-Merge Reminders is a Github Action pulls tagged comments from edited files and comments them on your PRs.
+Merge Reminders is a Github Action pulls flagged comments from edited files and comments them on your PRs.
 This is useful for code with specific rules about updating that are important not to forget.
 
 ![Merge Comment Reminders PR Comment](https://github.com/pjflanagan/merge-reminders/blob/main/readme/comment.png?raw=true)
