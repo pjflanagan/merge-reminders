@@ -1,7 +1,8 @@
 name: Merge Comment Reminders
 description: Pulls flagged comments from edited files and comments them on your PRs
-icon: check-square
-color: purple
+branding:
+  icon: check-square
+  color: purple
 
 on:
   pull_request:
