@@ -29,9 +29,9 @@ jobs:
               echo ""
               comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
               {
-                echo 'comments<<EOF'
+                echo 'comments<<"\n"'
                 echo $comments
-                echo EOF
+                echo "\n"
               } >> "$GITHUB_OUTPUT"
             else
               echo "None"
