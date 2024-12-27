@@ -21,7 +21,7 @@ jobs:
           echo "Modified files:"
           if [ -n "$files" ]; then
             echo "$files"
-            lines=$(echo "$files" | xargs grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+            lines=$(echo "$files" | xargs -f grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
             echo "Modified lines:"
             if [ -n "$lines" ]; then
               echo "$lines"
