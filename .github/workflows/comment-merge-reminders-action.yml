@@ -42,7 +42,7 @@ jobs:
               echo "$comments"
               echo ""
 
-              echo 'JSON_RESPONSE<<EOF' >> $GITHUB_OUTPUT
+              echo 'comments<<EOF' >> $GITHUB_OUTPUT
               echo "$comments" >> $GITHUB_OUTPUT
               echo 'EOF' >> $GITHUB_OUTPUT
 
@@ -60,9 +60,7 @@ jobs:
         id: validate-merge-comments
         run: |
           echo "${{ steps.find-merge-comments.outputs.comments }}"
-  
- 
-  
+
       - name: Find comment
         uses: peter-evans/find-comment@v3
         id: fc
