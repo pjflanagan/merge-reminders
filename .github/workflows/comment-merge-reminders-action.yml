@@ -14,12 +14,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # {
-      #   echo 'comments<<EOF'
-      #   echo $comments
-      #   echo EOF
-      # } >> "$GITHUB_OUTPUT"
-
       - name: Find for merge comments
         id: find-merge-comments
         run: |
@@ -31,7 +25,7 @@ jobs:
             echo ""
 
             echo "Modified lines:"
-            lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "") # if this ends up in a PR comment, it's because the action was edited
+            lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
 
             if [ -n "$lines" ]; then
               echo "$lines"
