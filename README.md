@@ -6,10 +6,6 @@ This is useful for code with specific rules about updating that are important no
 
 ![Merge Comment Reminders PR Comment](https://github.com/pjflanagan/merge-reminders/blob/main/readme/comment.png?raw=true)
 
-## Installation
-
-...
-
 ## Usage
 
 Add comments beginning with `MERGE:` to your code like this:
@@ -43,9 +39,3 @@ forcing users to acknowledge instructions for each file. This is useful when:
 - You need devs to update a different file to match changes in this one
 - You need to remind devs to update documentation
 - You need devs to be aware of how their code changes might cause unwanted side effects
-
-
-### Notes
-
-- https://docs.github.com/en/actions/writing-workflows/quickstart 
-- https://github.com/bcgov-nr/action-pr-description-add
