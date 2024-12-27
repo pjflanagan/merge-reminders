@@ -9,12 +9,12 @@ if [ -n "$files" ]; then
     echo "$lines"
     echo ""
     comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
-    echo "comments=$comments"
+    echo "comments=$comments" >> $GITHUB_OUTPUT
   else
     echo "None"
-    echo "comments=None"
+    echo "comments=None" >> $GITHUB_OUTPUT
   fi
 else
   echo "None"
-  echo "comments=None"
+  echo "comments=None" >> $GITHUB_OUTPUT
 fi
