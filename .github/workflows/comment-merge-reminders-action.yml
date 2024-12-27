@@ -14,31 +14,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      # {
-      #   echo 'comments<<EOF'
-      #   echo $comments
-      #   echo EOF
-      # } >> "$GITHUB_OUTPUT"
-
       - name: Find for merge comments
         id: find-merge-comments
         run: |
           echo "Modified files:"
-          files=$(git diff --name-only origin/main HEAD)
+          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
 
           if [ -n "$files" ]; then
             echo "$files"
             echo ""
 
             echo "Modified lines:"
-            lines=$(echo "$files" | xargs -r grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+            lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
 
             if [ -n "$lines" ]; then
               echo "$lines"
               echo ""
 
               echo "Formatting comments:"
-              comments=$(echo "$lines" | sed 's/^[ \t]*/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
               echo "$comments"
               echo ""
 
