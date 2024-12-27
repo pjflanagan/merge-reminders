@@ -56,11 +56,6 @@ jobs:
             echo "comments=None" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Validate merge comments for test
-        id: validate-merge-comments
-        run: |
-          echo "${{ steps.find-merge-comments.outputs.comments }}"
-
       - name: Find comment
         uses: peter-evans/find-comment@v3
         id: fc
