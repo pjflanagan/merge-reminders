@@ -14,27 +14,52 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Search for merge comments
-        id: search-merge-comments
+      # {
+      #   echo 'comments<<EOF'
+      #   echo $comments
+      #   echo EOF
+      # } >> "$GITHUB_OUTPUT"
+
+      - name: Find for merge comments
+        id: find-merge-comments
         run: |
-          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           echo "Modified files:"
+          files=$(git diff --name-only origin/main HEAD)
+
           if [ -n "$files" ]; then
             echo "$files"
-            lines=$(echo "$files" | xargs -f grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+            echo ""
+
             echo "Modified lines:"
+            lines=$(echo "$files" | xargs -r grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+
             if [ -n "$lines" ]; then
               echo "$lines"
-              comments=$(echo "$lines" | sed 's/^/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
-              echo "comments=$comments" >> $GITHUB_OUTPUT   
-            else 
+              echo ""
+
+              echo "Formatting comments:"
+              comments=$(echo "$lines" | sed 's/^[ \t]*/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              echo "$comments"
+              echo ""
+
+              echo 'comments<<EOF' >> $GITHUB_OUTPUT
+              echo "$comments" >> $GITHUB_OUTPUT
+              echo 'EOF' >> $GITHUB_OUTPUT
+
+            else
               echo "None"
-              echo "comments=None" >> $GITHUB_OUTPUT
+              echo "comments=None" >> "$GITHUB_OUTPUT"
             fi
-          else 
+
+          else
             echo "None"
-            echo "comments=None" >> $GITHUB_OUTPUT
+            echo "comments=None" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Validate merge comments for test
+        id: validate-merge-comments
+        run: |
+          echo "${{ steps.find-merge-comments.outputs.comments }}"
 
       - name: Find comment
         uses: peter-evans/find-comment@v3
@@ -54,5 +79,5 @@ jobs:
           edit-mode: replace
           body: |
             **Merge Reminders**
-            ${{ steps.search-merge-comments.outputs.comments }}
+            ${{ steps.find-merge-comments.outputs.comments }}
           reactions: eyes
