@@ -31,14 +31,14 @@ jobs:
             echo ""
 
             echo "Modified lines:"
-            lines=$(echo "$files" | xargs -r grep -r '// MERGE:') # if this line ends up in the comment it's because the action was edited
+            lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "") # if this ends up in a PR comment, it's because the action was edited
 
             if [ -n "$lines" ]; then
               echo "$lines"
               echo ""
 
               echo "Formatting comments:"
-              comments=$(echo "$lines" | sed 's/^[ \t]*/- [ ] `/' | sed 's/:\/\/ MERGE:/`:/')
+              comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
               echo "$comments"
               echo ""
 
