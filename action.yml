@@ -24,6 +24,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Script Location
+      shell: bash
+      run: |
+        pwd
+        ls
+
     - name: Checkout code
       uses: actions/checkout@v2
       with:
@@ -35,13 +41,7 @@ runs:
       env:
         INPUT_BASE_SHA: ${{ inputs.base-sha }}
         INPUT_HEAD_SHA: ${{ inputs.head-sha }}
-      run: |
-        ls
-        cd ..
-        ls
-        cd ..
-        ls
-        main.sh
+      run: main.sh
 
     - name: Find PR comment
       uses: peter-evans/find-comment@v3
