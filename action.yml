@@ -24,16 +24,16 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Script Location
-      shell: bash
-      run: |
-        pwd
-        ls
-
     - name: Checkout code
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
 
     - name: Find merge comments
       id: find-merge-comments
@@ -41,9 +41,7 @@ runs:
       env:
         INPUT_BASE_SHA: ${{ inputs.base-sha }}
         INPUT_HEAD_SHA: ${{ inputs.head-sha }}
-      run: |
-        pwd
-        main.sh
+      run: main.sh
 
     - name: Find PR comment
       uses: peter-evans/find-comment@v3
