@@ -3,74 +3,86 @@ description: Pulls flagged comments from edited files and comments them on your 
 branding:
   icon: check-square
   color: purple
+inputs:
+  token:
+    description: "GITHUB_TOKEN or a repo scoped PAT."
+    default: ${{ github.token }}
+  repository:
+    description: "The full name of the repository in which to create or update a comment."
+    default: ${{ github.repository }}
+  issue-number:
+    description: "The number of the issue or pull request in which to create a comment."
+  base-sha:
+    description: "The hash of the base branch."
+    required: true
+    default: ${{ github.event.pull_request.base.sha }}
+  head-sha:
+    description: "The hash of the PR branch."
+    default: ${{ github.event.pull_request.head.sha }}
 
-on:
-  pull_request:
-    types: [opened, edited, synchronize]
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
-jobs:
-  merge-comment-reminders-action:
-    runs-on: ubuntu-latest
+    - name: Find merge comments
+      id: find-merge-comments
+      shell: bash
+      runs-on: ubuntu-latest
+      run: |
+        echo "Modified files:"
+        files=$(git diff --name-only ${{ inputs.base-sha }} ${{ inputs.head-sha }})
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        if [ -n "$files" ]; then
+          echo "$files"
+          echo ""
 
-      - name: Find merge comments
-        id: find-merge-comments
-        run: |
-          echo "Modified files:"
-          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          echo "Modified lines:"
+          lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
 
-          if [ -n "$files" ]; then
-            echo "$files"
+          if [ -n "$lines" ]; then
+            echo "$lines"
             echo ""
 
-            echo "Modified lines:"
-            lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
+            echo "Formatting comments:"
+            comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
+            echo "$comments"
+            echo ""
 
-            if [ -n "$lines" ]; then
-              echo "$lines"
-              echo ""
-
-              echo "Formatting comments:"
-              comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
-              echo "$comments"
-              echo ""
-
-              echo 'comments<<EOF' >> $GITHUB_OUTPUT
-              echo "$comments" >> $GITHUB_OUTPUT
-              echo 'EOF' >> $GITHUB_OUTPUT
-
-            else
-              echo "None"
-              echo "comments=None" >> "$GITHUB_OUTPUT"
-            fi
+            echo 'comments<<EOF' >> $GITHUB_OUTPUT
+            echo "$comments" >> $GITHUB_OUTPUT
+            echo 'EOF' >> $GITHUB_OUTPUT
 
           else
             echo "None"
             echo "comments=None" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Find PR comment
-        uses: peter-evans/find-comment@v3
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: "github-actions[bot]"
-          body-includes: Merge Reminders
+        else
+          echo "None"
+          echo "comments=None" >> "$GITHUB_OUTPUT"
+        fi
 
-      - name: Update PR comment
-        uses: peter-evans/create-or-update-comment@v4.0.0
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          issue-number: ${{ github.event.pull_request.number }}
-          edit-mode: replace
-          body: |
-            **Merge Reminders**
-            ${{ steps.find-merge-comments.outputs.comments }}
-          reactions: eyes
+    - name: Find PR comment
+      uses: peter-evans/find-comment@v3
+      id: fc
+      with:
+        issue-number: ${{ inputs.issue-number }}
+        comment-author: "github-actions[bot]"
+        body-includes: Merge Reminders
+
+    - name: Update PR comment
+      uses: peter-evans/create-or-update-comment@v4.0.0
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        token: ${{ inputs.token }}
+        repository: ${{ inputs.repository }}
+        issue-number: ${{ inputs.issue-number }}
+        edit-mode: replace
+        body: |
+          **Merge Reminders**
+          ${{ steps.find-merge-comments.outputs.comments }}
+        reactions: eyes
