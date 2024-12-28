@@ -1,18 +1,16 @@
 
 # Merge Comment Reminders
 
-Merge Comment Reminders is a Github Action pulls flagged comments from edited files and comments them on your PRs.
-This is useful for code with specific rules about updating that are important not to forget.
+Merge Comment Reminders finds flagged comments on edited files and comments them on your PR.
+This can be used when your code has specific rules about updates that you want to ensure are acknowledged.
 
 ![Merge Comment Reminders PR Comment](https://github.com/pjflanagan/merge-reminders/blob/main/readme/comment.png?raw=true)
 
 ## Installation
 
-First, add this file to your repository.
+First, add this code to `.github/workflows/merge-comment-reminders.yml`
 
 ```yml
-# .github/workflows/merge-comment-reminders.yml
-
 name: Merge Comment Reminders
 
 on:
@@ -25,12 +23,11 @@ jobs:
 
     steps:
       - name: Merge Comment Reminders
-        uses: pjflanagan/merge-reminders@release-v0.0.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: pjflanagan/merge-reminders@release-v1.0.0
 ```
 
-Then, in the Github repository settings, go to Actions > General > Workflow permissions and allow actions to "Read and write permissions"
+Make sure you have enabled read and write action permissions in you Github repository settings.
+To do so, go to Actions > General > Workflow permissions and allow actions to "Read and write permissions"
 
 ## Usage
 
@@ -53,20 +50,19 @@ class API:
 ```
 
 Then, when a dev creates a PR that modifies a file with `MERGE:` comments,
-those instructions will automatically be commented on your PRs, like this:
+those instructions will automatically be commented on your PRs. Like this:
 
 > **Merge Reminders**
 > - [ ] `Header.tsx`: Be sure `offsetHeight` is reflected in `style.module.scss`
 > - [ ] `api.py` Update the [documentation](https://docs.example.com) or @pjflanagan will be **very** upset
 
-You can then make it a requirement to check all boxes on PRs before merge using another action
-like [Task Completed Checker](https://github.com/marketplace/actions/task-completed-checker),
-requiring devs to acknowledge instructions for each file they updated. This is useful when:
+You can then enforce all PR checkboxes are ticked before merging using [Task Completed Checker](https://github.com/marketplace/actions/task-completed-checker).
+
+Now you've configured your repo to require devs to acknowledge instructions for each file they updated. This is useful when:
 - You want to ask devs to adhere to a pattern
 - You need devs to update a different file to match changes in this one
 - You need to remind devs to update documentation
 - You need devs to be aware of how their code changes might cause unwanted side effects
-
 
 ### Specific use cases
 
@@ -82,9 +78,9 @@ you'll have to fake it.
 
 ## Testing
 
-1. Clone the merge-reminders-test
-2. Point the merge reminder action the branch you'd like to test
-3. See the output
+1. Clone the [merge-reminders-test](https://github.com/pjflanagan/merge-reminders-test) repo
+2. Point the `test-workflow-branch.yml` action to the branch you'd like to test by changing `/merge-reminders@main` to be `@<your-branch-name>`
+3. Update files in the `examples` folder
 
 ## Releasing
 
