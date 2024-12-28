@@ -35,9 +35,8 @@ runs:
       env:
         INPUT_BASE_SHA: ${{ inputs.base-sha }}
         INPUT_HEAD_SHA: ${{ inputs.head-sha }}
-      run: |
-        ls
-        bash main.sh
+      # This isn't working because the shell is in the other repo, not the action repo
+      run: dist/main.sh
 
     - name: Find PR comment
       uses: peter-evans/find-comment@v3

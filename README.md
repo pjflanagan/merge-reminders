@@ -39,7 +39,7 @@ Add comments beginning with `MERGE:` to your code like this:
 ```tsx
 // Header.tsx
 
-const offsetHeight = 154; // MERGE: Be sure `offsetHeight` is reflected in `style.module.scss`
+const offsetHeight = 120; // MERGE: Be sure `offsetHeight` is reflected in `style.module.scss`
 ```
 
 Comments can use Markdown and Github usernames:
@@ -59,15 +59,16 @@ those instructions will automatically be commented on your PRs, like this:
 > - [ ] `Header.tsx`: Be sure `offsetHeight` is reflected in `style.module.scss`
 > - [ ] `api.py` Update the [documentation](https://docs.example.com) or @pjflanagan will be **very** upset
 
-You can then make it a requirement to check all boxes on PRs before merge using another action like [Task Completed Checker](https://github.com/marketplace/actions/task-completed-checker),
-forcing users to acknowledge instructions for each file. This is useful when:
+You can then make it a requirement to check all boxes on PRs before merge using another action
+like [Task Completed Checker](https://github.com/marketplace/actions/task-completed-checker),
+requiring devs to acknowledge instructions for each file they updated. This is useful when:
 - You want to ask devs to adhere to a pattern
 - You need devs to update a different file to match changes in this one
 - You need to remind devs to update documentation
 - You need devs to be aware of how their code changes might cause unwanted side effects
 
 
-### Specific Use Cases
+### Specific use cases
 
 Merge Reminders only supports `#` and `//` comments. If the language uses a different type of comment
 you'll have to fake it.
@@ -81,7 +82,13 @@ you'll have to fake it.
 
 ## Testing
 
-See merge-reminders-test repo.
+1. Clone the merge-reminders-test
+2. Point the merge reminder action the branch you'd like to test
+3. See the output
+
+## Releasing
+
+TKTK
 
 ## Contributing
 
