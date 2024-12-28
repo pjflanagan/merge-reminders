@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Merge Comment Reminders
-        uses: pjflanagan/merge-reminders@release-v1.0.0
+        uses: pjflanagan/merge-reminders@v1.0.0
 ```
 
 Make sure you have enabled read and write action permissions in you Github repository settings.
