@@ -32,7 +32,6 @@ runs:
     - name: Find merge comments
       id: find-merge-comments
       shell: bash
-      runs-on: ubuntu-latest
       run: |
         echo "Modified files:"
         files=$(git diff --name-only ${{ inputs.base-sha }} ${{ inputs.head-sha }})
