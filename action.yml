@@ -32,39 +32,10 @@ runs:
     - name: Find merge comments
       id: find-merge-comments
       shell: bash
-      run: |
-        echo "Modified files:"
-        files=$(git diff --name-only ${{ inputs.base-sha }} ${{ inputs.head-sha }})
-
-        if [ -n "$files" ]; then
-          echo "$files"
-          echo ""
-
-          echo "Modified lines:"
-          lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
-
-          if [ -n "$lines" ]; then
-            echo "$lines"
-            echo ""
-
-            echo "Formatting comments:"
-            comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
-            echo "$comments"
-            echo ""
-
-            echo 'comments<<EOF' >> $GITHUB_OUTPUT
-            echo "$comments" >> $GITHUB_OUTPUT
-            echo 'EOF' >> $GITHUB_OUTPUT
-
-          else
-            echo "None"
-            echo "comments=None" >> "$GITHUB_OUTPUT"
-          fi
-
-        else
-          echo "None"
-          echo "comments=None" >> "$GITHUB_OUTPUT"
-        fi
+      env:
+        INPUT_BASE_SHA: ${{ inputs.base-sha }}
+        INPUT_HEAD_SHA: ${{ inputs.head-sha }}
+      run: main.sh
 
     - name: Find PR comment
       uses: peter-evans/find-comment@v3
