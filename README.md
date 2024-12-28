@@ -1,10 +1,10 @@
+![Merge Comment Reminders PR Comment](https://github.com/pjflanagan/merge-reminders/blob/main/readme/comment.png?raw=true)
 
 # Merge Comment Reminders
 
 Merge Comment Reminders finds flagged comments on edited files and comments them on your PR.
 This can be used when your code has specific rules about updates that you want to ensure are acknowledged.
 
-![Merge Comment Reminders PR Comment](https://github.com/pjflanagan/merge-reminders/blob/main/readme/comment.png?raw=true)
 
 ## Installation
 
