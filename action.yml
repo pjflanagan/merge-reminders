@@ -20,6 +20,12 @@ inputs:
   head-sha:
     description: "The hash of the PR branch."
     default: ${{ github.event.pull_request.head.sha }}
+  flag:
+    description: "The flag to search for in comments."
+    default: "Merge:"
+  title:
+    description: "The title of the comment."
+    default: "Merge Reminders"
 
 runs:
   using: composite
@@ -49,7 +55,7 @@ runs:
       with:
         issue-number: ${{ inputs.issue-number }}
         comment-author: "github-actions[bot]"
-        body-includes: Merge Reminders
+        body-includes: ${{ inputs.title }}
 
     - name: Update PR comment
       uses: peter-evans/create-or-update-comment@v4.0.0
@@ -60,6 +66,6 @@ runs:
         issue-number: ${{ inputs.issue-number }}
         edit-mode: replace
         body: |
-          **Merge Reminders**
+          **${{ inputs.title }}**
           ${{ steps.find-merge-comments.outputs.comments }}
         reactions: eyes

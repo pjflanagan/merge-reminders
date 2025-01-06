@@ -6,14 +6,14 @@ if [ -n "$files" ]; then
   echo ""
 
   echo "Modified lines:"
-  lines=$(echo "$files" | xargs -r grep -r '[\/\/|#] MERGE:' || echo "")
+  lines=$(echo "$files" | xargs -r grep -r "[\/\/|#] $INPUT_FLAG" || echo "")
 
   if [ -n "$lines" ]; then
     echo "$lines"
     echo ""
 
     echo "Formatting comments:"
-    comments=$(echo "$lines" | sed 's/:.*[\/\/|#] MERGE/`/' | sed 's/^/- [ ] `/' )
+    comments=$(echo "$lines" | sed "s/:.*[\/\/|#] $INPUT_FLAG/\`/" | sed 's/^/- [ ] `/' )
     echo "$comments"
     echo ""
 
