@@ -13,7 +13,7 @@ if [ -n "$files" ]; then
     echo ""
 
     echo "Formatting comments:"
-    comments=$(echo "$lines" | sed "s/:.*[\/\/|#] $INPUT_FLAG/\`/" | sed 's/^/- [ ] `/' )
+    comments=$(echo "$lines" | sed "s/:.*[\/\/|#] $INPUT_FLAG/\`:/" | sed 's/^/- [ ] `/' )
     echo "$comments"
     echo ""
 

@@ -47,6 +47,7 @@ runs:
       env:
         INPUT_BASE_SHA: ${{ inputs.base-sha }}
         INPUT_HEAD_SHA: ${{ inputs.head-sha }}
+        INPUT_FLAG: ${{ inputs.flag }}
       run: main.sh
 
     - name: Find PR comment
